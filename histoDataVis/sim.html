@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body { padding-left:80px; padding-bottom: 300px; word-wrap:break-word;}
+
+        #windspeedChart, #windGraph {
+            width: 1300px;
+            height: 500px;
+            position: relative;
+        }
+        .floatingBox {
+            display: inline-block;
+            /*width:350px;*/
+        }
+        .inputBoxDate {
+            width: 255px;
+            height: 35px;
+        }
+        .button {
+            background-color: #ffffff;
+            border: 2px solid #008CBA;
+            color: #000000;
+            padding: 10px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            -webkit-transition-duration: 0.4s;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .button:hover {
+            background-color: #008CBA;
+            color: white;
+        }
+        .button1 {
+            background-color: white;
+            color: black;
+            border: 2px solid #b1b1b1;
+        }
+        .button1:hover {
+            background-color: #b1b1b1;
+        }
+        .button2 {
+            background-color: #a7cb9f;
+            border: 2px solid #a7cb9f;
+            color: white;
+        }
+        .button2:hover {
+            background-color: white;
+            color: black;
+            border: 2px solid #a7cb9f;
+        }
+        ::placeholder {
+            font-size: 16px;
+            color: #bbbbbb;
+        }
+        .form-style-8{
+            font-family: 'Helvetica', sans-serif;
+            width: 78%;
+            padding: 30px;
+            background: #FFFFFF;
+            margin: 50px auto;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.22);
+            -moz-box-shadow: 0 0 15px rgba(0, 0, 0, 0.22);
+            -webkit-box-shadow:  0 0 15px rgba(0, 0, 0, 0.22);
+
+        }
+        .form-style-8 h2 {
+            background: #4D4D4D;
+            text-transform: uppercase;
+            font-family: 'Open Sans Condensed', sans-serif;
+            color: #797979;
+            font-size: 18px;
+            font-weight: 100;
+            padding: 20px;
+            margin: -30px -30px 30px -30px;
+        }
+        .form-style-8 h4 {
+            color: #7f7f7f;
+            font-family: 'Helvetica', sans-serif;
+            padding-right: 20px;
+        }
+    </style>
+</head>
+<body>
+<script type="text/javascript"
+        src="../Library/dygraph/dygraph.js"></script>
+<link rel="stylesheet" src="../Library/dygraph/dygraph.css" />
+<script src='../Library/jquery-3-4-1.min.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.17/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="//unpkg.com/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.17/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!--<div id="windspeedChart" class="group">-->
+<!--    <div class="form-style-8">-->
+<h2>Date Range</h2>
+<form>
+
+    <input type="button" onclick="enabled = false; query();" class="button button2" value="Filter">
+    <input class = "station" value="RayTest" type="checkbox">
+    <input class = "station" value="Select Station" type="checkbox">
+    <input class = "station" value="Select Station" type="checkbox">
+
+</form>
+<!--    </div>-->
+
+<!--    <div class="full"></div>-->
+
+
+
+<!--    <div id="windspeedFull" class="floatingBox"></div>-->
+<!--</div>-->
+<script>
+    var stationIs = [];
+    function query() {
+        var a=0;
+        var stations = document.getElementsByClassName("station");
+        console.log(stations);
+        for(var i=0; i<stations.length; i++){
+            if(stations[i].checked==true) {
+                stationIs[a] = stations[i].value;
+                console.log(stationIs[a]);
+                a++
+            }
+        }
+        console.log(stationIs);
+        queryAndDisplay()
+    }
+
+    var queryAndDisplay = function () {
+        $.ajax({
+            url: 'http://localhost:3000/render',
+            success: function (res) {
+                console.log(res);
+                // window.location.replace('/render');
+                // console.log(res);
+
+
+                // Wind_Speed2 = [];
+                // var j = 0;
+                // for (var i = 0; i < result.length; i++) {
+                //     if (i === result.length - 1) {
+                //         if (!!result[i].time) {
+                //             if (j === 0) {
+                //                 Wind_Speed2.push({ x: new Date(result[i].time), y: result[i].Wind_Speed});
+                //                 j = 1;
+                //             } else {
+                //                 Wind_Speed2.push({ x: new Date(result[i].time), y: result[i].Wind_Speed});
+                //             }
+                //         }
+                //     } else {
+                //         if (!!result[i].time) {
+                //             if (j === 0) {
+                //                 Wind_Speed2.push({ x: new Date(result[i].time), y: result[i].Wind_Speed});
+                //                 j = 1;
+                //             } else {
+                //                 Wind_Speed2.push({ x: new Date(result[i].time), y: result[i].Wind_Speed});
+                //             }
+                //         }
+                //     }
+                // }
+                // windspeedChartDisplay2();
+            }
+        });
+    }
+</script>
+</body>
+</html>

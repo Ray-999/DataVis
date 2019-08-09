@@ -1,0 +1,164 @@
+<html>
+<head>
+    <style>
+        #gx, #gy, #gz {
+        width:320px; height:320px;
+        display: inline-block;
+        margin: 1em;
+    }</style>
+    <script type="text/javascript"
+            src="../Library/dygraph/dygraph.js"></script>
+    <link rel="stylesheet" src="../Library/dygraph/dygraph.css" />
+    <script src='../Library/jquery-3-4-1.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/justgage/1.2.9/justgage.min.js"></script>
+</head>
+<body>
+<h2>New 5s Average Gage</h2>
+<div id="gx"></div>
+<div id="gy"></div>
+<div id="gz"></div>
+
+<h2>Live Chart</h2>
+<h3>X</h3>
+<div id="graphx"></div>
+<h3>Y</h3>
+<div id="graphy"></div>
+<h3>Z</h3>
+<div id="graphz"></div>
+<button onclick = "query()" id = "fakeBu"></button>
+<script type="text/javascript">
+</script>
+<script>
+    var gx,gy,gz;
+    gx = new JustGage({
+        id: "gx",
+        title: "X",
+        max:400000,
+        min:0,
+        label: "x average value"
+    });
+    gx.refresh(0);
+    gy = new JustGage({
+        id: "gy",
+        title: "Y",
+        max:400000,
+        min:0,
+        label: "y average value"
+    });
+    gy.refresh(0);
+    gz = new JustGage({
+        id: "gz",
+        title: "Z",
+        max:400000,
+        min:0,
+        label: "z average value"
+    });
+    gz.refresh(0);
+
+    var xa,ya,za;
+
+    function avg(res,len){
+        var arr = res.slice(Math.max(res.length - len, 1));
+        xa = ya = za = 0;
+        for(var i = 0; i<arr.length; i++){
+            xa += arr[i].mean;
+            ya += arr[i].mean_1;
+            za += arr[i].mean_2
+        }
+        xa = xa/len;
+        ya = ya/len;
+        za = za/len;
+    }
+
+    function query() {
+        $.ajax({
+            url: "http://localhost:8008/query",
+            method: "get",
+            //Says success isn't used but it is
+            success: function(res){
+                console.log(res);
+                var x_arr = [];
+                var y_arr = [];
+                var z_arr = [];
+
+                res.forEach(function(el,i) {
+                        // var time = new Date(el.time);
+                        // console.log(time);
+                        x_arr[i] = [new Date(el.time), el.mean];
+                        y_arr[i] = [new Date(el.time), el.mean_1];
+                        z_arr[i] = [new Date(el.time), el.mean_2];
+                        console.log(x_arr[i])
+                    }
+                );
+
+                avg(res,5);
+
+                console.log(res);
+                // var res_x=res[0];
+                // var res_y=res[1];
+                // var res_z=res[2];
+                // var x = converter(res_x,"Y","Z");
+                // var y = converter(res_y,"X","Z");
+                // var z = converter(res_z,"X","Y");
+                // console.log(x);
+                // console.log(y);
+                // console.log(z);
+                // var x_csv = convertToCSV(x, "X");
+                // var y_csv = convertToCSV(y, "Y");
+                // var z_csv = convertToCSV(z, "Z");
+                // console.log(x_csv);
+                // console.log(y_csv);
+                // console.log(z_csv);
+                Z = new Dygraph(
+
+                    // containing div
+                    document.getElementById("graphz"),
+
+                    // CSV or path to a CSV file.
+                    z_arr,
+                    {
+                        labels: [ "time", "Z" ]
+                    }
+
+                );
+                Y = new Dygraph(
+
+                    // containing div
+                    document.getElementById("graphy"),
+
+                    // CSV or path to a CSV file.
+                    y_arr,
+                {
+                    labels: [ "time", "Y" ]
+                }
+
+                );
+                X = new Dygraph(
+
+                    // containing div
+                    document.getElementById("graphx"),
+
+                    // CSV or path to a CSV file.
+                    x_arr,
+                    {
+                        labels: [ "time", "X" ]
+                    }
+
+                );
+                gx.refresh(Math.abs(xa));
+                gy.refresh(Math.abs(ya));
+                gz.refresh(Math.abs(za));
+
+            }
+        });
+    }
+</script>
+<script>
+    // setTimeout(function(){
+    //     window.location.reload(1);
+    // }, 5000);
+    setInterval(function () {document.getElementById("fakeBu").click();}, 5000);
+</script>
+</body>
+</html>
