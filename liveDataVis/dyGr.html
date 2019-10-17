@@ -1,64 +1,148 @@
 <html>
 <head>
     <style>
-        #gx, #gy, #gz {
-        width:320px; height:320px;
-        display: inline-block;
-        margin: 1em;
-    }</style>
+        #gx, #gy, #gz, #gx2, #gy2, #gz2 {
+            width:300px; height:300px;
+            display: inline-block;
+            margin: 1em;
+        }
+        #graphx, #graphx2, #graphy, #graphy2, #graphz, #graphz2, #vector, #vector2{
+            display: inline-block;
+        }
+        #but1, #but2, #but3, #but4{
+            display: inline-block;
+        }
+        #station_one, #station_two{
+            background-color: gray;
+        }
+        /*.station_one {*/
+        /*    display: none;*/
+        /*}*/
+        /*.station_two {*/
+        /*    display: none;*/
+        /*}*/
+    </style>
     <script type="text/javascript"
             src="../Library/dygraph/dygraph.js"></script>
     <link rel="stylesheet" src="../Library/dygraph/dygraph.css" />
     <script src='../Library/jquery-3-4-1.min.js'></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/justgage/1.2.9/justgage.min.js"></script>
+    <script src="../Library/justgage-1.2.2/raphael-2.1.4.min.js"></script>
+    <script src="../Library/justgage-1.2.2/justgage.js"></script>
 </head>
-<body>
-<h2>New 5s Average Gage</h2>
-<div id="gx"></div>
-<div id="gy"></div>
-<div id="gz"></div>
+<script>
+    function myFunction(objButton) {
+        var x = document.getElementsByClassName(objButton.value);
+        // console.log(objButton.value);
+        var y = '.'+objButton.value;
+        var z = '#'+objButton.value;
+        console.log(y);
+        if (x[0].style.display === "none") {
+            $(y).show();
+            $(z).css('backgroundColor', 'gray');
+        } else {
+            $(y).hide();
+            $(z).css('backgroundColor', 'white');
+        }
 
-<h2>Live Chart</h2>
-<h3>X</h3>
-<div id="graphx"></div>
-<h3>Y</h3>
-<div id="graphy"></div>
-<h3>Z</h3>
-<div id="graphz"></div>
-<button onclick = "query()" id = "fakeBu"></button>
+    }
+</script>
+<body>
+<div id="but1">
+    <p>Middletown, NY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+    <button onclick="myFunction(this)" value="station_one" id="station_one">station one</button>
+</div>
+<div id="but2">
+    <p>Socal, CA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+    <button onclick="myFunction(this)" value="station_two" id="station_two">station two</button>
+</div>
+<div id="but3">
+    <p>Not Avaliable&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+    <button onclick="myFunction(this)" value="station_three" id="station_three">station three</button>
+</div>
+<div id="but4">
+    <p>Not Avaliable&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+    <button onclick="myFunction(this)" value="station_four" id="station_four">station four</button>
+</div>
+
+<div id="gauge">
+    <h2>The gauges represent live X-Y-Z data from the ESP-1 Station in Middletown, NY with a 2-minute delay</h2>
+    <div class="station_one">
+        <h2>Station One</h2>
+        <div id="gx"></div>
+        <div id="gy"></div>
+        <div id="gz"></div>
+    </div><br>
+    <div class="station_two">
+        <h2>Station Two</h2>
+        <div id="gx2"></div>
+        <div id="gy2"></div>
+        <div id="gz2"></div>
+    </div>
+</div>
+
+<div id="livechart">
+    <h1>Live Chart</h1>
+    <h2>The charts represent 2 minutes of live data from the ESP-1 Station, with a 2-minute delay</h2>
+    <div class="station_one">
+        <h2>Station One</h2><br>
+        <div id="graphx"></div>
+        <div id="graphy"></div>
+        <div id="graphz"></div>
+    </div>
+    <div class="station_two">
+        <h2>Station Two</h2><br>
+        <div id="graphx2"></div>
+        <div id="graphy2"></div>
+        <div id="graphz2"></div>
+    </div>
+</div>
+
+<div id="modal">
+    <h1>Vector</h1>
+    <p class= "para">Here is the info about the earthquake, the values of the axis are on the labels.<br><br>Data updates every 5 seconds, although there is a delay of 1 to 3 minutes.</p>
+    <div class="station_one" id="vector">
+        <!--        <h2>Station One</h2>-->
+        <div id="myModal" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <!--                <div class="modal-header">Station One</div>-->
+                <div class="modal-body" >
+                    <img src="3D_Vector_Arrow.png" alt = "ESP Vector" id = "myImg" class="station_one">
+                    <div id="233"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="station_two" id="vector2">
+        <!--        <h2>Station Two</h2>-->
+        <div id="myModal2" class="modal">
+            <!-- Modal content -->
+            <div class="modal-content">
+                <!--                <div class="modal-header">Station Two</div>-->
+                <div class="modal-body" >
+                    <img src="3D_Vector_Arrow2.png" alt = "ESP Vector" id = "myImg2" class="station_two">
+                    <div id="2332"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br><br><br><br><br><br><br><br><br>
+
+
+
+
+
+<button onclick = "query();query2();" id = "fakeBu"></button>
+<!--<button onclick = "query()" id = "someButton"></button>-->
 <script type="text/javascript">
 </script>
 <script>
-    var gx,gy,gz;
-    gx = new JustGage({
-        id: "gx",
-        title: "X",
-        max:400000,
-        min:0,
-        label: "x average value"
-    });
-    gx.refresh(0);
-    gy = new JustGage({
-        id: "gy",
-        title: "Y",
-        max:400000,
-        min:0,
-        label: "y average value"
-    });
-    gy.refresh(0);
-    gz = new JustGage({
-        id: "gz",
-        title: "Z",
-        max:400000,
-        min:0,
-        label: "z average value"
-    });
-    gz.refresh(0);
-
-    var xa,ya,za;
-
+    var staone = [],
+        statwo = [];
     function avg(res,len){
+        var xa, ya, za;
         var arr = res.slice(Math.max(res.length - len, 1));
         xa = ya = za = 0;
         for(var i = 0; i<arr.length; i++){
@@ -69,15 +153,67 @@
         xa = xa/len;
         ya = ya/len;
         za = za/len;
+        return [xa, ya, za];
     }
+</script>
+<script>
+    var gx,gy,gz;
+    gx = new JustGage({
+        id: "gx",
+        title: "X1",
+        customSectors: [{ color : "#66ccff", lo : 0, hi : 20 }, { color: "#ff0000", lo: 20, hi: 100 }],
+        max:400000,
+        min:0,
+        label: "x average value",
+        levelColorsGradient: true
+
+    });
+    gx.refresh(0);
+    gy = new JustGage({
+        id: "gy",
+        title: "Y1",
+        customSectors: [{ color : "#66ccff", lo : 0, hi : 20 }, { color: "#ff0000", lo: 20, hi: 100 }],
+        max:400000,
+        min:0,
+        label: "y average value",
+        levelColorsGradient: false
+
+    });
+    gy.refresh(0);
+    gz = new JustGage({
+        id: "gz",
+        title: "Z1",
+        customSectors: [{ color : "#66ccff", lo : 0, hi : 20 }, { color: "#ff0000", lo: 20, hi: 100 }],
+        max:400000,
+        min:0,
+        label: "z average value",
+        levelColorsGradient: false
+
+    });
+    gz.refresh(0);
+
+    // var xa, ya, ga;
+    // function avg(res,len){
+    //
+    //     var arr = res.slice(Math.max(res.length - len, 1));
+    //     xa = ya = za = 0;
+    //     for(var i = 0; i<arr.length; i++){
+    //         xa += arr[i].mean;
+    //         ya += arr[i].mean_1;
+    //         za += arr[i].mean_2
+    //     }
+    //     xa = xa/len;
+    //     ya = ya/len;
+    //     za = za/len;
+    // }
 
     function query() {
         $.ajax({
-            url: "http://localhost:8008/query",
+            url: "http://localhost:3005/query",
             method: "get",
             //Says success isn't used but it is
             success: function(res){
-                console.log(res);
+                // console.log(res);
                 var x_arr = [];
                 var y_arr = [];
                 var z_arr = [];
@@ -88,32 +224,144 @@
                         x_arr[i] = [new Date(el.time), el.mean];
                         y_arr[i] = [new Date(el.time), el.mean_1];
                         z_arr[i] = [new Date(el.time), el.mean_2];
-                        console.log(x_arr[i])
+                        // console.log(x_arr[i])
                     }
                 );
 
-                avg(res,5);
-
-                console.log(res);
-                // var res_x=res[0];
-                // var res_y=res[1];
-                // var res_z=res[2];
-                // var x = converter(res_x,"Y","Z");
-                // var y = converter(res_y,"X","Z");
-                // var z = converter(res_z,"X","Y");
-                // console.log(x);
-                // console.log(y);
-                // console.log(z);
-                // var x_csv = convertToCSV(x, "X");
-                // var y_csv = convertToCSV(y, "Y");
-                // var z_csv = convertToCSV(z, "Z");
-                // console.log(x_csv);
-                // console.log(y_csv);
-                // console.log(z_csv);
+                staone = avg(res,5);
                 Z = new Dygraph(
 
                     // containing div
                     document.getElementById("graphz"),
+
+                    // CSV or path to a CSV file.
+                    z_arr,
+                    {
+                        labels: [ "time", "Z" ],
+                        title: "Z"
+                    }
+
+                );
+                Y = new Dygraph(
+
+                    // containing div
+                    document.getElementById("graphy"),
+
+                    // CSV or path to a CSV file.
+                    y_arr,
+                    {
+                        labels: [ "time", "Y" ],
+                        title: "Y"
+                    }
+
+                );
+                X = new Dygraph(
+
+                    // containing div
+                    document.getElementById("graphx"),
+
+                    // CSV or path to a CSV file.
+                    x_arr,
+                    {
+                        labels: [ "time", "X" ],
+                        title: "X"
+                    }
+
+                );
+                console.log(staone);
+                gx.refresh(Math.abs(staone[0]));
+                gy.refresh(Math.abs(staone[1]));
+                gz.refresh(Math.abs(staone[2]));
+
+                // var fs = require('fs');
+                // var cont = xa, ya, za;
+                // fs.write(test.csv, cont, 'a');
+                D3Chart();
+
+
+
+            }
+        });
+    }
+</script>
+
+<script>
+    var gx2,gy2,gz2;
+    gx2 = new JustGage({
+        id: "gx2",
+        title: "X2",
+        customSectors: [{ color : "#66ccff", lo : 0, hi : 20 }, { color: "#ff0000", lo: 20, hi: 100 }],
+        max:400000,
+        min:0,
+        label: "x average value",
+        levelColorsGradient: true
+
+    });
+    gx2.refresh(0);
+    gy2 = new JustGage({
+        id: "gy2",
+        title: "Y2",
+        customSectors: [{ color : "#66ccff", lo : 0, hi : 20 }, { color: "#ff0000", lo: 20, hi: 100 }],
+        max:400000,
+        min:0,
+        label: "y average value",
+        levelColorsGradient: false
+
+    });
+    gy2.refresh(0);
+    gz2 = new JustGage({
+        id: "gz2",
+        title: "Z2",
+        customSectors: [{ color : "#66ccff", lo : 0, hi : 20 }, { color: "#ff0000", lo: 20, hi: 100 }],
+        max:400000,
+        min:0,
+        label: "z average value",
+        levelColorsGradient: false
+
+    });
+    gz2.refresh(0);
+
+    // var xa2, ya2, ga2;
+    // function avg(res,len){
+    //
+    //     var arr = res.slice(Math.max(res.length - len, 1));
+    //     xa2 = ya2 = za2 = 0;
+    //     for(var i = 0; i<arr.length; i++){
+    //         xa2 += arr[i].mean;
+    //         ya2 += arr[i].mean_1;
+    //         za2 += arr[i].mean_2
+    //     }
+    //     xa2 = xa2/len;
+    //     ya2 = ya2/len;
+    //     za2 = za2/len;
+    // }
+
+    function query2() {
+        $.ajax({
+            url: "http://localhost:3005/query2",
+            method: "get",
+            //Says success isn't used but it is
+            success: function(res){
+                // console.log(res);
+                var x_arr = [];
+                var y_arr = [];
+                var z_arr = [];
+
+                res.forEach(function(el,i) {
+                        // var time = new Date(el.time);
+                        // console.log(time);
+                        x_arr[i] = [new Date(el.time), el.mean];
+                        y_arr[i] = [new Date(el.time), el.mean_1];
+                        z_arr[i] = [new Date(el.time), el.mean_2];
+                        // console.log(x_arr[i])
+                    }
+                );
+
+                statwo = avg(res,5);
+                Z = new Dygraph(
+
+                    // containing div
+                    document.getElementById("graphz2"),
 
                     // CSV or path to a CSV file.
                     z_arr,
@@ -125,40 +373,184 @@
                 Y = new Dygraph(
 
                     // containing div
-                    document.getElementById("graphy"),
+                    document.getElementById("graphy2"),
 
                     // CSV or path to a CSV file.
                     y_arr,
-                {
-                    labels: [ "time", "Y" ]
-                }
+                    {
+                        labels: [ "time", "Y" ]
+                    }
 
                 );
                 X = new Dygraph(
 
                     // containing div
-                    document.getElementById("graphx"),
+                    document.getElementById("graphx2"),
 
                     // CSV or path to a CSV file.
                     x_arr,
                     {
                         labels: [ "time", "X" ]
                     }
-
                 );
-                gx.refresh(Math.abs(xa));
-                gy.refresh(Math.abs(ya));
-                gz.refresh(Math.abs(za));
+                console.log(statwo);
+                gx2.refresh(Math.abs(statwo[0]));
+                gy2.refresh(Math.abs(statwo[1]));
+                gz2.refresh(Math.abs(statwo[2]));
+
+                // var fs = require('fs');
+                // var cont = xa, ya, za;
+                // fs.write(test.csv, cont, 'a');
+                D3Chart2();
+
+
 
             }
         });
     }
 </script>
+
+<!--<script>-->
+
+
+<!--fail-->
+<!--<script type="text/javascript">-->
+<!--function toPython(usrdata) {-->
+<!--$.ajax({-->
+<!--url: "http://yoursite.com:8080",-->
+<!--type: "POST",-->
+<!--data: {information: "You have a very nice website, sir.", userdata: usrdata},-->
+<!--dataType: "json",-->
+<!--success: function (data) {-->
+<!--&lt;!&ndash; do something here &ndash;&gt;-->
+<!--$('#somediv').html(data);-->
+<!--}-->
+<!--});-->
+<!--}-->
+<!--$("#someButton").bind('click', toPython(something));-->
+<!--</script>-->
+
+
+<script>
+    // Step - 1. Call the document load function.
+
+    var D3Chart = function() {
+// Step 2 : Call the action on submit evenet :
+// step 3:  Call the Ajax Function
+        $.ajax( {
+            // Step 4: Create here the data for the field values. Request Method 'POST' OR 'GET' and Url for Processing the form.
+            data : {
+                key1: staone[0],
+                key2: staone[1],
+                key3: staone[2],
+            },
+            type : 'GET',
+            url : 'http://localhost:7000/process',
+            success: function(res){
+                console.log(res);
+
+                // $.fn.redraw = function(){
+                //     $(this).each(function(){
+                //         var redraw = this.offsetHeight;
+                //     });
+                // };
+                // $('#myImg').redraw();
+
+                // var image_x = document.getElementById('myImg');
+                // image_x.parentNode.removeChild(image_x);
+                // $("<img>")
+                //     .attr("src","3D_Vector_Arrow.png")
+                //     .attr("id","#myImg")
+                //     .appendTo("#233")
+                // document.getElementById("placehere").appendChild(elem);
+                // document.getElementById("myImg").src="3D_Vector_Arrow.png";
+
+                $("#myImg").remove();
+                $("<img>")
+                    .attr("src","3D_Vector_Arrow.png?"+ (new Date).getTime())
+                    .attr("id","myImg")
+                    .attr("alt","ESP Vector")
+                    .appendTo("#233");
+
+                // Use an off-screen image to load the next frame.
+                // var img = new Image();
+
+                // When it is loaded...
+
+                // Set the on-screen image to the same source. This should be instant because
+                // it is already loaded.
+                // document.getElementById("frame").src = img.src;
+                // img.src = "frame.jpg?" + (new Date).getTime();
+
+                // Schedule loading the next frame.
+                // setTimeout(function() {
+                //     img.src = "frame.jpg?" + (new Date).getTime();
+                // }, 1000/15); // 15 FPS (more or less)
+
+
+                // Start the loading process.
+                // img.src = "frame.jpg?" + (new Date).getTime();
+            }
+        });
+// Step 5: Call the success function.
+// Step 6 : Wrtite the code for the data retured from the Server url: '/example'
+// Step 7 : Prevent the enitre submit event to do default action
+// event.preventDefault();
+
+    };
+</script>
+
+<script>
+    var D3Chart2 = function() {
+        $.ajax( {
+            data : {
+                key1: statwo[0],
+                key2: statwo[1],
+                key3: statwo[2],
+            },
+            type : 'GET',
+            url : 'http://localhost:7000/process2',
+            success: function(res){
+                console.log(res);
+                $("#myImg2").remove();
+                $("<img>")
+                    .attr("src","3D_Vector_Arrow2.png?"+ (new Date).getTime())
+                    .attr("id","myImg2")
+                    .attr("alt","ESP Vector")
+                    .appendTo("#2332");
+
+            }
+        });
+    };
+</script>
+
 <script>
     // setTimeout(function(){
     //     window.location.reload(1);
     // }, 5000);
     setInterval(function () {document.getElementById("fakeBu").click();}, 5000);
 </script>
+
+<script>
+    // Use an off-screen image to load the next frame.
+    var img = new Image();
+
+    // When it is loaded...
+    img.addEventListener("load", function() {
+
+        // Set the on-screen image to the same source. This should be instant because
+        // it is already loaded.
+        document.getElementById("frame").src = img.src;
+
+        // Schedule loading the next frame.
+        setTimeout(function() {
+            img.src = "frame.jpg?" + (new Date).getTime();
+        }, 1000/15); // 15 FPS (more or less)
+    });
+
+    // Start the loading process.
+    img.src = "frame.jpg?" + (new Date).getTime();
+</script>
+
 </body>
 </html>

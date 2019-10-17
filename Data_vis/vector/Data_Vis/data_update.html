@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <meta charset="UTF-8">
+<!--    <meta http-equiv="refresh" content="1"/>-->
+    <link rel="stylesheet" type="text/css" href="data_update.css">
+    <title>ESP Data</title>
+
+</head>
+<body>
+<h1>Data uploads to CSV every second</h1>
+<p> <div style="color:red" id="timer"></div> <br> Time elapsed (seconds)</p>
+<script>
+    //Load the table
+    $(document).ready(function() {
+        $.ajax({
+            url: "http://localhost:6699/espdata",
+            method: "get",
+            //Says success isn't used but it is
+            success: function(resp){
+                console.log(resp)
+            }
+        });
+    } );
+</script>
+<script>
+    function markPresent() {
+        window.markDate = new Date();
+        $(document).ready(function() {
+            $("div.absent").toggleClass("present");
+        });
+        updateClock();
+    }
+
+    function updateClock() {
+        const currDate = new Date();
+        const diff = currDate - markDate;
+        document.getElementById("timer").innerHTML = format(diff/1000);
+        setTimeout(function() {updateClock()}, 1000);
+    }
+
+    function format(seconds)
+    {
+        const numhours = parseInt(Math.floor(((seconds % 31536000) % 86400) / 3600),10);
+        const numminutes = parseInt(Math.floor((((seconds % 31536000) % 86400) % 3600) / 60),10);
+        const numseconds = parseInt((((seconds % 31536000) % 86400) % 3600) % 60,10);
+        return ((numhours<10) ? "0" + numhours : numhours)
+            + ":" + ((numminutes<10) ? "0" + numminutes : numminutes)
+            + ":" + ((numseconds<10) ? "0" + numseconds : numseconds);
+    }
+    markPresent();
+</script>
+</body>
+</html>

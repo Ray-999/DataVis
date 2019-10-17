@@ -6,6 +6,9 @@
     <style>
         body { padding-left:80px; padding-bottom: 300px; word-wrap:break-word;}
 
+        #graphx, #graphx2, #graphy, #graphy2, #graphz, #graphz2, #vector, #vector2{
+            display: inline-block;
+        }
         #windspeedChart, #windGraph {
             width: 1300px;
             height: 500px;
@@ -109,17 +112,26 @@
 
 <!--<div id="windspeedChart" class="group">-->
 <!--    <div class="form-style-8">-->
-        <h2>Date Range</h2>
+        <h2>Selection</h2>
         <form>
 
             <h4 class="floatingBox">Select Start Date:</h4>
             <input type="date" class="inputBoxDate datePicker date" placeholder="Select Date" id = "begin"/>
             <h4 class="floatingBox">Select End Date:</h4>
             <input type="date" class="inputBoxDate datePicker date" placeholder="Select Date" id = "end"/>
-            <input class = "station" value="RayTest" type="checkbox">
-            <input class = "station" value="Select Station" type="checkbox">
-            <input class = "station" value="Select Station" type="checkbox">
+<!--            <input class = "station" value="RayTest" type="checkbox">-->
+<!--            <input class = "station" value="Select Station" type="checkbox">-->
+<!--            <input class = "station" value="Select Station" type="checkbox">-->
+            <h4 class="floatingBox">Select Station:</h4>
+            <select id="station">
+                <option></option>
+                <option value="station_one">station one, Middletown, NY</option>
+                <option value="station_two">station two, Socal, CA</option>
+                <option value="station_three">Not avaliable</option>
+                <option value="station_four">Not avaliable</option>
+            </select><br><br>
             <input type="button" onclick="enabled = false; query();" class="button button2" value="Filter">
+            <br><br><br>
             <div id="graphx"></div>
             <div id="graphy"></div>
             <div id="graphz"></div>
@@ -133,24 +145,27 @@
 <!--    <div id="windspeedFull" class="floatingBox"></div>-->
 <!--</div>-->
 <script>
-    var timeFrom,timeTo;
-    var stationIs = [];
+    var timeFrom,timeTo,stationIs,querystr;
     function query() {
         timeFrom = document.getElementById("begin").value;
         timeTo = document.getElementById("end").value;
-        var a=0;
-        var stations = document.getElementsByClassName("station");
-        console.log(stations);
-        for(var i=0; i<stations.length; i++){
-            if(stations[i].checked==true) {
-                stationIs[a] = stations[i].value;
-                console.log(stationIs[a]);
-                a++
-            }
-        }
+        stationIs = document.getElementById("station").value;
+        // var a=0;
+        // var stations = document.getElementsByClassName("station");
+        // console.log(stations);
+        // for(var i=0; i<stations.length; i++){
+        //     if(stations[i].checked==true) {
+        //         stationIs[a] = stations[i].value;
+        //         console.log(stationIs[a]);
+        //         a++
+        //     }
+        // }
+        console.log(timeFrom);
+        console.log(timeTo);
         console.log(stationIs);
 
         querystr = "timeFrom:" + timeFrom + "&timeTo:" + timeTo + "&stationIs:" + stationIs;
+        console.log(querystr);
 
         if (timeFrom && timeTo) {
             queryAndDisplay(querystr);
@@ -170,18 +185,16 @@
                 var x_arr = [];
                 var y_arr = [];
                 var z_arr = [];
-                console.log(res);
-                for(var i=0;i<res.length;i++) {
-                    res[i].forEach(function (el, i) {
-                            // var time = new Date(el.time);
-                            // console.log(time);
-                            x_arr[i] = [new Date(el.time), el.mean];
-                            y_arr[i] = [new Date(el.time), el.mean_1];
-                            z_arr[i] = [new Date(el.time), el.mean_2];
-                            console.log(x_arr[i])
-                        }
-                    );
-                }
+
+                res.forEach(function(el,i) {
+                    // var time = new Date(el.time);
+                    // console.log(time);
+                    x_arr[i] = [new Date(el.time), el.mean];
+                    y_arr[i] = [new Date(el.time), el.mean_1];
+                    z_arr[i] = [new Date(el.time), el.mean_2];
+                    // console.log(x_arr[i])
+                });
+
                 // console.log(res);
                 Z = new Dygraph(
 
@@ -191,7 +204,8 @@
                     // CSV or path to a CSV file.
                     z_arr,
                     {
-                        labels: [ "time", "Z" ]
+                        labels: [ "time", "Z" ],
+                        title: "Z"
                     }
 
                 );
@@ -203,7 +217,8 @@
                     // CSV or path to a CSV file.
                     y_arr,
                     {
-                        labels: [ "time", "Y" ]
+                        labels: [ "time", "Y" ],
+                        title: "Y"
                     }
 
                 );
@@ -215,7 +230,8 @@
                     // CSV or path to a CSV file.
                     x_arr,
                     {
-                        labels: [ "time", "X" ]
+                        labels: [ "time", "X" ],
+                        title: "X"
                     }
 
                 );

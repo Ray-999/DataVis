@@ -7,16 +7,7 @@ const influx = new Influx.InfluxDB({
     database: 'RayESP',
     username: "rayf",
     password: "RayESP8010",
-    port: 8086,
-    schema: [
-        {
-            measurement: 'RayTest',
-            fields: {
-            },
-            tags: [
-            ]
-        }
-    ]
+    port: 8086
 });
 
 function convertToCSV(objArray,m) {
@@ -58,12 +49,13 @@ function avg(res,len){
     return average
 }
 
-var pastTime = "4000m";
-var nowTime = "3999m";
+var pastTime = "4m";
+var nowTime = "2m";
 var queryX = 'SELECT MEAN("X") FROM RayTest WHERE time >= now() - ' + pastTime + ' AND time<=now() - '+ nowTime + ' GROUP BY time(1s)';
 var queryY = 'SELECT MEAN("Y") FROM RayTest WHERE time >= now() - ' + pastTime + ' AND time<=now() - '+ nowTime + ' GROUP BY time(1s)';
 var queryZ = 'SELECT MEAN("Z") FROM RayTest WHERE time >= now() - ' + pastTime + ' AND time<=now() - '+ nowTime + ' GROUP BY time(1s)';
-var queryA = 'SELECT MEAN("X"), MEAN("Y"), MEAN("Z") FROM RayTest WHERE time >= now() - ' + pastTime + ' AND time<=now() - '+ nowTime + ' GROUP BY time(1s)';
+var queryA = 'SELECT MEAN("X"), MEAN("Y"), MEAN("Z") FROM station_one WHERE time >= now() - ' + pastTime + ' AND time<=now() - '+ nowTime + ' GROUP BY time(1s)';
+var queryA2 = 'SELECT MEAN("X"), MEAN("Y"), MEAN("Z") FROM station_two WHERE time >= now() - ' + pastTime + ' AND time<=now() - '+ nowTime + ' GROUP BY time(1s)';
 console.log(queryX);
 // var queryX = "SELECT MEAN(\"X\") FROM ar WHERE time>'2019-07-23T20:25:00Z' AND time<'2019-07-23T20:29:00Z' GROUP BY time(1s)";
 // var queryY = "SELECT MEAN(\"Y\") FROM ar WHERE time>'2019-07-23T20:25:00Z' AND time<'2019-07-23T20:29:00Z' GROUP BY time(1s)";
@@ -93,6 +85,8 @@ app.get('/query', function (req, res) {
         // res.status(500).send(err.stack)
         console.log(err)
     });
+
+
 
     // influx.query(queryX).then
     // (result => {
@@ -162,4 +156,13 @@ app.get('/query', function (req, res) {
     //         console.log(error.message);
     //     });
 });
-app.listen('8008');
+app.get('/query2', function (req, res) {
+    influx.query(queryA2).then
+    (result => {
+        console.log(result);
+        res.send(result);
+    }).catch(err => {
+        console.log(err)
+    });
+});
+app.listen('3005');

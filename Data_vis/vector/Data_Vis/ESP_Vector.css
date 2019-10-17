@@ -1,0 +1,53 @@
+/* Challenge 6.2 HTML*/
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* The Modal (background) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 0;
+    padding-top: 13%;
+    left: 30%;
+    width: 50%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0);
+}
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #ffffff;
+    margin: auto;
+    padding: 5px;
+    border: 1px solid #000000;
+    width: 50%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.5s;
+    animation-name: animatetop;
+    animation-duration: 0.5s
+}
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+.modal-header {
+    padding: 2px 16px;
+    background-color: #00ffff;
+    color: #ff0000;
+}
+.modal-body {padding: 2px 16px;}
+.modal-footer {
+    padding: 2px 16px;
+    background-color: #00ffff;
+    color: #ff0000;
+}
+.para {
+    color: black;
+}

@@ -7,15 +7,6 @@ const influx = new Influx.InfluxDB({
     username: "rayf",
     password: "RayESP8010",
     port: 8086,
-    schema: [
-        {
-            measurement: 'RayTest',
-            fields: {
-            },
-            tags: [
-            ]
-        }
-    ]
 });
 
 function convertToCSV(objArray,m) {
@@ -45,26 +36,26 @@ var life = [];
 
 app.get('/newWind', function (req, res) {
     // console.log(req.query);
-    for(var i=0; i<req.query.stationIs.length; i++) {
-        var queryX = 'SELECT MEAN("X") FROM RayTest WHERE time >= ' + "'" + req.query.timeFrom + "'" + ' AND time<= ' + "'" + req.query.timeTo + "'" + ' GROUP BY time(1s) fill(none)';
-        var queryY = 'SELECT MEAN("Y") FROM RayTest WHERE time >= ' + "'" + req.query.timeFrom + "'" + ' AND time<= ' + "'" + req.query.timeTo + "'" + ' GROUP BY time(1s) fill(none)';
-        var queryZ = 'SELECT MEAN("Z") FROM RayTest WHERE time >= ' + "'" + req.query.timeFrom + "'" + ' AND time<= ' + "'" + req.query.timeTo + "'" + ' GROUP BY time(1s) fill(none)';
-        var queryA = 'SELECT MEAN("X"), MEAN("Y"), MEAN("Z") FROM ' + req.query.stationIs[i] + ' WHERE time >= ' + "'" + req.query.timeFrom + "'" + ' AND time<= ' + "'" + req.query.timeTo + "'" + ' GROUP BY time(1s)';
-        var query = 'SELECT * FROM RayTest WHERE time >= ' + "'" + req.query.timeFrom + "'" + ' AND time<= ' + "'" + req.query.timeTo + "'" + ' AND X!=\'\' GROUP BY time(1s)';
-        // console.log(queryA);
+    // for(var i=0; i<req.query.stationIs.length; i++) {
+        // var queryX = 'SELECT MEAN("X") FROM RayTest WHERE time >= ' + "'" + req.query.timeFrom + "'" + ' AND time<= ' + "'" + req.query.timeTo + "'" + ' GROUP BY time(1s) fill(none)';
+        // var queryY = 'SELECT MEAN("Y") FROM RayTest WHERE time >= ' + "'" + req.query.timeFrom + "'" + ' AND time<= ' + "'" + req.query.timeTo + "'" + ' GROUP BY time(1s) fill(none)';
+        // var queryZ = 'SELECT MEAN("Z") FROM RayTest WHERE time >= ' + "'" + req.query.timeFrom + "'" + ' AND time<= ' + "'" + req.query.timeTo + "'" + ' GROUP BY time(1s) fill(none)';
+        var queryA = 'SELECT MEAN("X"), MEAN("Y"), MEAN("Z") FROM ' + req.query.stationIs + ' WHERE time >= ' + "'" + req.query.timeFrom + "'" + ' AND time<= ' + "'" + req.query.timeTo + "'" + ' GROUP BY time(1s)';
+        // var query = 'SELECT * FROM RayTest WHERE time >= ' + "'" + req.query.timeFrom + "'" + ' AND time<= ' + "'" + req.query.timeTo + "'" + ' AND X!=\'\' GROUP BY time(1s)';
+        console.log(queryA);
         // console.log(query);
         influx.query(queryA).then
         (result => {
             // var resss = converter(result);
             // console.log(resss);
             console.log(result);
-            stations = result;
-            // res.send(result)
+            // stations = result;
+            res.send(result)
         }).catch(err => {
             res.status(500).send(err.stack)
         });
-    }
-    res.send(life);
+    // }
+    // res.send(life);
 
     // influx.query(queryX).then
     // (result => {
@@ -156,9 +147,9 @@ app.get('/newWind', function (req, res) {
     //         console.log(error.message);
     //     });
 });
-app.get('/render', function (req, res) {
-            res.render('/historical.html');
-        });
+// app.get('/render', function (req, res) {
+//             res.render('/historical.html');
+//         });
 
 
 app.listen(3000);

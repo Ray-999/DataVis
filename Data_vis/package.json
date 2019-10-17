@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "jest": "^23.6.0",
+    "@types/jest": "^23.3.12"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "csv-writer": "latest",
+    "express": "latest",
+    "influx": "latest",
+    "mysql": "^2.17.1"
+  }
+}
